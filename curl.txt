@@ -1,0 +1,33 @@
+{"request": "{ "delay":10, "title":"mon titre","message":"mon message", "audio":"output.caf"}", "aps":{"content-available":1, "priority":5, "request": { "delay":10, "title":"mon titre","message":"mon message", "audio":"7_tts_audio.mp3"}}}
+
+{
+  additionalData: {
+    content-available: 1
+    foreground: false,
+    coldstart:false,
+    priority:5,
+    request: {
+      message: 'message',
+      title: 'title',
+      audio: 'audio',
+      delay: 'delay'
+    }
+  }
+}
+
+curl -d proto=apns \
+       -d token=994b4ad81f03327b3cbd75ee646dc469fca11888c76dd120f7599d55cfb512ba \
+       -d lang=fr \
+       -d badge=0 \
+       -d category=show \
+       -d contentAvailable=true \
+       http://localhost:8080/subscribers
+
+curl -d lang=fr -d badge=0 http://localhost:8080/subscriber/JRrxKlBd82Q
+
+curl -d lang=fr -d badge=0 http://localhost:8080/subscriber/JRrxKlBd82Q
+
+# Sans message
+curl -d data.request='{"priority":5,"delay":"2016-05-01T16:30:00Z","title":"mon titre","message":"mon message","audio":"7_tts_audio.mp3"}' -d badge=0 http://localhost:8080/event/unicast:JRrxKlBd82Q
+# Avec message
+curl -d msg='Message de test' -d data.request="{\"priority\":5,\"delay\":5,\"title\":\"mon titre\",\"message\":\"mon message\",\"audio\":\"7_tts_audio.mp3\"}" -d badge=0 http://localhost:8080/event/unicast:JRrxKlBd82Q
