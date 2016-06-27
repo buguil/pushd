@@ -1,4 +1,5 @@
 gcm = require 'node-gcm'
+logger = require 'winston'
 
 class PushServiceGCM
     validateToken: (token) ->
@@ -21,7 +22,7 @@ class PushServiceGCM
                 @multicastQueue[messageKey].tokens.push(info.token)
                 @multicastQueue[messageKey].subscribers.push(subscriber)
             else
-                note = new gcm.Message()
+                note = new gcm.Message({priority: payload.priority})
                 note.collapseKey = payload.event?.name
                 if subOptions?.ignore_message isnt true
                     if title = payload.localizedTitle(info.lang)
@@ -29,6 +30,7 @@ class PushServiceGCM
                     if message = payload.localizedMessage(info.lang)
                         note.addData 'message', message
                 note.addData(key, value) for key, value of payload.data
+                logger.info(note)
                 @multicastQueue[messageKey] = {tokens: [info.token], subscribers: [subscriber], note: note}
 
                 # Give half a second for tokens to accumulate

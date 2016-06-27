@@ -12,6 +12,7 @@ class Payload
         @msg = {}
         @data = {}
         @var = {}
+        @priority = 'normal'
         @incrementBadge = yes
 
         # Read fields
@@ -29,6 +30,7 @@ class Payload
                 when 'badge' then @badge = value
                 when 'category' then @category = value
                 when 'contentAvailable' then @contentAvailable = value != 'false'
+                when 'priority' then @priority = value
                 else
                     if ([prefix, subkey] = key.split('.', 2)).length is 2
                         @[prefix][subkey] = value
